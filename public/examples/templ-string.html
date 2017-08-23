@@ -1,0 +1,52 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+
+<script>
+  class StringElement extends Polymer.Element {
+    static get is() { return 'templ-string'; }
+  
+    // This getter is called once, when the first instance of the element is upgraded.
+    static get template() {
+      return `<style>
+        :host {
+          display: block; 
+          font-size: 30px;
+        }
+        span {
+          margin-left: 10px;
+        }
+        button {
+          background: transparent;
+          font-size: inherit;
+          border: none;
+          cursor: pointer;
+        }
+      </style>
+      <button on-click="increment">🔝</button>
+      <span id="output">[[display(counter)]]</span>`
+    }
+
+    static get properties() {
+      return {
+        counter: {type: Number, reflectToAttribute: true},
+        limit: {notify: true, type: Number}
+      }
+    }
+
+    constructor() {
+      super();
+      this.counter = 0;
+      this.limit = 10;
+    }
+
+    increment() {
+      this.counter = Math.min(this.counter+1, this.limit);
+    }
+
+    display(c) {
+      return '🎈'.repeat(c);
+    }
+  }
+
+  // Register element.
+  customElements.define('templ-string', StringElement);
+</script>

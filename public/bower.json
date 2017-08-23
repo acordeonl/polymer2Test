@@ -1,0 +1,12 @@
+{
+  "name": "polymer-2-examples",
+  "version": "0.0.1",
+  "description": "Examples that show what each of the Polymer 2.0 mixins do",
+  "license": "MIT",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^2.0.0",
+    "paper-input": "PolymerElements/paper-input#^2.0.1",
+    "paper-icon-button": "PolymerElements/paper-icon-button#^2.0.0",
+    "star-rating": "acordeonl/star-rating#^2.0.1"
+  }
+}

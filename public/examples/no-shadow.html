@@ -1,0 +1,23 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="/examples/polymer-el.html">
+
+<dom-module id="no-shadow">
+  <script>
+    class NoShadowElement extends PolyElement {
+      static get is() { return 'no-shadow'; }
+      
+      constructor() {
+        super();
+      }
+      
+      _attachDom(dom) {
+        return this.appendChild(dom);
+        // fix styles
+        
+      }
+    }
+
+    // Register element.
+    customElements.define('no-shadow', NoShadowElement);
+  </script>
+</dom-module>

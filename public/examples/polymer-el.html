@@ -1,0 +1,66 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<!-- <link rel="import" href="/bower_components/paper-input/paper-input.html"> -->
+<!-- <link rel="import" href="/bower_components/star-rating/star-rating.html"> -->
+<link rel="import" href="/star-rating2/star-rating2.html">
+
+<dom-module id="polymer-el">
+  <template>
+    <style>
+      :host {
+        display: block; 
+        font-size: 30px;
+      }
+      span {
+        margin-left: 10px;
+      }
+      button {
+        background: transparent;
+        font-size: inherit;
+        border: none;
+        cursor: pointer;
+      }
+      paper-input{
+        width: 200px ; 
+      }
+    </style>
+    <button id="b" on-click="increment">🔝</button>
+    <paper-input></paper-input>
+    star start
+    <!-- <star-rating rate="4"></star-rating> -->
+    <star-rating2 rate="4"></star-rating2>
+    star end
+    <span>[[display(counter)]]</span>
+    [[name]]
+  </template>
+
+  <script>
+    class PolyElement extends Polymer.Element {
+      static get is() { return 'polymer-el'; }
+      
+      static get properties() {
+        return {
+          counter: {type: Number, reflectToAttribute: true},
+          limit:   {notify: true, type: Number},
+          name:  {type: String , reflectToAttribute: true}
+        }
+      }
+
+      constructor() {
+        super();
+        this.counter = 0;
+        this.limit = 10;
+      }
+
+      increment() {
+        this.counter = Math.min(this.counter+1, this.limit);
+      }
+
+      display(c) {
+        return '🎈'.repeat(c);
+      }
+    }
+
+    // Register element.
+    customElements.define('polymer-el', PolyElement);
+  </script>
+</dom-module>

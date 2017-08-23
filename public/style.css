@@ -1,0 +1,27 @@
+/* styles for the demo page*/
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: helvetica, arial, sans-serif;
+  margin: 25px;
+  max-width: 600px;
+  margin: 20px auto;
+}
+
+.example {
+  border-left: 4px solid #1DE9B6;
+  border-bottom: 1px solid #1DE9B6;
+  padding-left: 20px;
+}
+
+h1 {
+  color: #FF4081;
+}
+
+h2 {
+  font-weight: bold;
+  color: #1DE9B6;
+}

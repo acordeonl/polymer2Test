@@ -1,0 +1,44 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="/examples/polymer-el.html">
+
+<dom-module id="inheritance-el">
+  <template>
+    <style>
+      #footer {
+        font-size: 20px;
+      }
+    </style>
+     <span id="footer">([[counter]])</span>
+   </template>
+  
+  <script>
+    var memoizedTemplate;
+    
+    class InheritanceElement extends PolyElement {
+      static get is() { return 'inheritance-el'; }
+      
+      static get template() {
+        if (!memoizedTemplate) {
+          // Retrieve this element's dom-module template
+          memoizedTemplate = Polymer.DomModule.import(InheritanceElement.is, 'template');
+
+          // Clone the contents of the superclass template
+          let superTemplateContents = document.importNode(PolyElement.template.content, true);
+
+          // Insert the superclass contents
+          let footer = memoizedTemplate.content.querySelector('#footer');
+          
+          memoizedTemplate.content.insertBefore(superTemplateContents, footer);
+        }
+        return memoizedTemplate;
+      }
+      
+      display(c) {
+        return '🐱'.repeat(c);
+      }
+    }
+
+    // Register element.
+    customElements.define('inheritance-el', InheritanceElement);
+  </script>
+</dom-module>
