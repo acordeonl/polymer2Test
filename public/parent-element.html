@@ -1,0 +1,27 @@
+<link rel="import" href="./bower_components/polymer/polymer-element.html">
+<dom-module id="parent-element">
+    <template>
+        <style>
+        </style>
+    </template>
+    <script>
+        var sleep = n => new Promise(resolve => setTimeout(resolve, n));
+        
+        class ParentElement extends Polymer.Element {
+            static get is() { return 'parent-element'; }
+            static get observers() {return []}
+            static get properties() {return {
+                name:{type:String,value:'el papa'},
+                someProp:{type:Number,value:10}
+            }}
+            constructor() {
+                super();
+                this.addEventListener('action', e => this._handleAction(e));
+            }
+            _handleAction(e) {
+                console.log('in parent men',e.detail.action);
+            }
+        }   
+        customElements.define('parent-element', ParentElement);
+    </script>
+</dom-module>

@@ -1,0 +1,66 @@
+<link rel="import" href="./parent-element.html">
+<link rel="import" href="./bower_components/star-rating/star-rating.html">
+<link rel="import" href="./midi-manager.html">
+
+<dom-module id="new-element">
+    <template>
+        <style>
+            :host{
+                --background-color :gray 
+            }
+            [wrapper]{
+                background: var(--background-color, blue) ; 
+                @apply --layout-vertical;
+                @apply --layout-center;
+                /* @apply --layout-center-justified; */
+            }
+        </style>
+        <midi-manager ></midi-manager>
+        <div wrapper>
+            <template is="dom-if" if="[[withHeader]]">
+                <h1 >this is a header</h1>
+            </template>
+            <div testWrapper>
+                cole
+            </div>
+            <template is="dom-repeat" items="{{arr}}" as ='item'>
+              <li>{{item}}
+            </template>
+            <button on-click='_attachElement'> attach test-element</button>
+            <button on-click='_removeElement'> remove test-element</button>
+        </div>
+    </template>
+    <script>
+        class NewElement extends ParentElement {
+            static get is() { return 'new-element'; }
+            static get properties() {return {
+                msg:{type:String,value:'hello cole'},
+                arr:{type:Array,value:['coleto','mas cole','man normal']},
+                withHeader:{type:Boolean,value:false}
+            }}
+            constructor() {
+                super();
+                this.loadedTestElement = new Promise(resolve => this.loadedTestElementR = resolve);
+            }
+            async _attachElement() {
+                Polymer.importHref(this.resolveUrl('/test-element.html'), e => {
+                    this.testElement = new TestElement ('MONOPOLIO')  ;
+                    this.loadedTestElementR() ; 
+                }, null, true );
+                await this.loadedTestElement ;
+                this.shadowRoot.querySelector('[testWrapper]').appendChild(this.testElement)
+            }
+            testAction() {
+                console.log('in test action man');
+            }
+            _removeElement() {
+                this.shadowRoot.querySelector('[testWrapper]').removeChild(this.testElement)
+            }
+            _handleAction(e) {
+                this.msg = 'holis men' ; 
+                this.withHeader = true ; 
+            }
+        }
+        customElements.define('new-element', NewElement);
+    </script>
+</dom-module>

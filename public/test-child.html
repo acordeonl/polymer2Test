@@ -1,0 +1,26 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+
+<dom-module id="test-child">
+    <template>
+        <style>
+        </style>
+        <button on-click='_handleClick' >fire event</button>
+    </template>
+    <script>
+        class TestChild extends Polymer.Element {
+            static get is() { return 'test-child'; }
+            static get observers() {return []}
+            static get listeners() {return {}}
+            static get properties() {return {}}
+            constructor() {
+                super();
+            }
+            _handleClick(e) {
+                this.dispatchEvent(new CustomEvent('button-click', {detail:{
+                    msg:'holis'
+                }, bubbles: true, composed: true }));
+            }
+        }
+        customElements.define('test-child', TestChild);
+    </script>
+</dom-module>

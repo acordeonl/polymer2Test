@@ -17,6 +17,7 @@
   <link rel="import" href="/examples/inheritance-el.html">
   <link rel="import" href="/examples/no-shadow.html">
   <link rel="import" href="/examples/templ-string.html">
+  <link rel="import" href="/new-element.html">
   
   <meta name="defaultLanguage" content="en">
   <meta name="availableLanguages" content="es, en">
@@ -27,9 +28,10 @@
   <header>
     <h1>Polymer 2.0 examples  <div class="glitchButton"></div></h1>
   </header>
-  
-  <p data-l10n-id="about"></p>
-  
+  <div class="example">
+    <new-element></new-element>
+  </div>
+
   <div class="example">
     <h2>HTMLElement</h2>
     <html-element data-l10n-id="html-element" limit = "3"></html-element>
@@ -85,7 +87,6 @@
     <templ-string counter="3"></templ-string>
   </div>
   
-  <script src="https://button.glitch.me/button.js"></script>
 
   </body>
 </html>
