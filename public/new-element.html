@@ -1,6 +1,12 @@
-<link rel="import" href="./parent-element.html">
-<link rel="import" href="./bower_components/star-rating/star-rating.html">
-<link rel="import" href="./midi-manager.html">
+<imports>
+    <link rel="import" href="./other-element.html">
+    <link rel="import" href="./parent-element.html">
+    <link rel="import" href="./test-element.html">
+    <link rel="import" href="./midi-manager.html" async>
+    <link rel="import" href="./my-behavior.html">
+    <script src="./testMixin.js"></script> 
+    <script src="./otherMixin.js"></script> 
+</imports>
 
 <dom-module id="new-element">
     <template>
@@ -10,9 +16,12 @@
             }
             [wrapper]{
                 background: var(--background-color, blue) ; 
-                @apply --layout-vertical;
-                @apply --layout-center;
+                /* @apply --layout-vertical; */
+                /* @apply --layout-center; */
                 /* @apply --layout-center-justified; */
+            }
+            .opaque{
+                opacity: 0.5 ; 
             }
         </style>
         <midi-manager ></midi-manager>
@@ -20,38 +29,59 @@
             <template is="dom-if" if="[[withHeader]]">
                 <h1 >this is a header</h1>
             </template>
-            <div testWrapper>
-                cole
+            <div testWrapper >
+                
             </div>
-            <template is="dom-repeat" items="{{arr}}" as ='item'>
-              <li>{{item}}
+            <br ></br>
+            <br ></br>
+            <test-element class$='{{_computeOpacity(opaque)}}' first-msg = 'hello leco'>
+                Cargando ...
+            </test-element>
+            <br ></br>
+            <template is="dom-repeat" items="[[arr]]" as ='item'>
+              <li>{{item.name}}
             </template>
             <button on-click='_attachElement'> attach test-element</button>
             <button on-click='_removeElement'> remove test-element</button>
         </div>
     </template>
     <script>
-        class NewElement extends ParentElement {
+        class NewElement extends Polymer.mixinBehaviors([MyBehavior],OtherMixin(TestMixin(ParentElement)) ) {
             static get is() { return 'new-element'; }
             static get properties() {return {
                 msg:{type:String,value:'hello cole'},
-                arr:{type:Array,value:['coleto','mas cole','man normal']},
+                arr:{type:Array,value:[
+                    {name:'covas'},
+                    {name:'camilo'},
+                    {name:'andres'},
+                    {name:'zabarra'}
+                ]},
+                opaque:{type:Boolean,value:false},
                 withHeader:{type:Boolean,value:false}
             }}
             constructor() {
                 super();
                 this.loadedTestElement = new Promise(resolve => this.loadedTestElementR = resolve);
             }
+            _computeOpacity(opaque) {
+                if (opaque) 
+                    return 'opaque' ; 
+                return '' ; 
+            }
             async _attachElement() {
                 Polymer.importHref(this.resolveUrl('/test-element.html'), e => {
                     this.testElement = new TestElement ('MONOPOLIO')  ;
+                    this.testElement.firstMsg ='vaina firme'
                     this.loadedTestElementR() ; 
-                }, null, true );
+                }, null, false );
                 await this.loadedTestElement ;
                 this.shadowRoot.querySelector('[testWrapper]').appendChild(this.testElement)
             }
             testAction() {
                 console.log('in test action man');
+                console.log(this._add3(1,2,3));
+                console.log(this._someOtherFunction(5,4));
+                console.log('end test action man');
             }
             _removeElement() {
                 this.shadowRoot.querySelector('[testWrapper]').removeChild(this.testElement)
@@ -59,6 +89,15 @@
             _handleAction(e) {
                 this.msg = 'holis men' ; 
                 this.withHeader = true ; 
+            }
+            _handleClick(e) {
+                console.log(this.mixinProp);
+                console.log('child button click');
+                this.msg = 'otra vaina'
+            }
+            ready() {
+                super.ready() ;
+                this.addEventListener('button-click', e => this._handleClick(e));   
             }
         }
         customElements.define('new-element', NewElement);

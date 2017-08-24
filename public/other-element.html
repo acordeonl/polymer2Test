@@ -1,0 +1,21 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+
+<dom-module id="other-element">
+    <template>
+        <style>
+        </style>
+        other element text
+    </template>
+    <script>
+        class OtherElement extends Polymer.Element {
+            static get is() { return 'other-element'; }
+            static get properties() {return {
+                propiedad:{type:String,value:'valor de propiedad'},
+            }}
+            constructor() {
+                super();
+            }
+        }
+        customElements.define('other-element', OtherElement);
+    </script>
+</dom-module>
