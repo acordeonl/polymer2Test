@@ -1,4 +1,5 @@
 <imports>
+    <link rel="import" href="/bower_components/polymer/lib/utils/import-href.html">
     <link rel="import" href="./other-element.html">
     <link rel="import" href="./parent-element.html">
     <link rel="import" href="./test-element.html">
@@ -6,6 +7,7 @@
     <link rel="import" href="./my-behavior.html">
     <script src="./testMixin.js"></script> 
     <script src="./otherMixin.js"></script> 
+    <script src="./lastMixin.js"></script> 
 </imports>
 
 <dom-module id="new-element">
@@ -46,7 +48,7 @@
         </div>
     </template>
     <script>
-        class NewElement extends Polymer.mixinBehaviors([MyBehavior],OtherMixin(TestMixin(ParentElement)) ) {
+        class NewElement extends LastMixin(Polymer.mixinBehaviors([MyBehavior], OtherMixin(TestMixin(ParentElement))))  {
             static get is() { return 'new-element'; }
             static get properties() {return {
                 msg:{type:String,value:'hello cole'},
