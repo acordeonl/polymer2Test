@@ -2,8 +2,14 @@
 
 <dom-module id="test-child">
     <template>
-        <style>
+        <style testStyle>
+            [text]{
+                @apply --my-mixin;
+            }
         </style>
+        <div text>
+            test child
+        </div>
         <button on-click='_handleClick' >fire event</button>
     </template>
     <script>

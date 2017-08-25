@@ -1,10 +1,15 @@
 <imports>
-    <link rel="import" href="/bower_components/polymer/lib/utils/import-href.html">
+    <link rel="import" href="/bower_components/shadycss/apply-shim.html">
+    <link rel="import" href="/bower_components/neon-animation/web-animations.html">
+    
+    <link rel="import" href="./bower_components/drop-menu/drop-menu.html">
+    <link rel="import" href="./bower_components/local-dom/local-dom.html">
+    <link rel="import" href="/bower_components/iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
     <link rel="import" href="./other-element.html">
     <link rel="import" href="./parent-element.html">
     <link rel="import" href="./test-element.html">
     <link rel="import" href="./midi-manager.html" async>
-    <link rel="import" href="./my-behavior.html">
+    <!-- <link rel="import" href="./my-behavior.html"> -->
     <script src="./testMixin.js"></script> 
     <script src="./otherMixin.js"></script> 
     <script src="./lastMixin.js"></script> 
@@ -14,42 +19,69 @@
     <template>
         <style>
             :host{
-                --background-color :gray 
+                --background-color :gray  ;
+                --my-mixin: {
+                  color: purple;
+                } ;
+                --centered-layout:{
+                    display: -ms-flexbox;
+                    display: -webkit-flex;
+                    display: flex;
+                    -ms-flex-direction: column;
+                    -webkit-flex-direction: column;
+                    flex-direction: column;
+                    -ms-flex-align: center;
+                    -webkit-align-items: center;
+                    align-items: center;
+                }
             }
             [wrapper]{
-                background: var(--background-color, blue) ; 
+                background: var(--background-color) ; 
+                @apply --centered-layout;
                 /* @apply --layout-vertical; */
                 /* @apply --layout-center; */
-                /* @apply --layout-center-justified; */
+            }
+            [mobile] [wrapper]{
+                background-color: red ;
             }
             .opaque{
                 opacity: 0.5 ; 
             }
         </style>
         <midi-manager ></midi-manager>
-        <div wrapper>
-            <template is="dom-if" if="[[withHeader]]">
-                <h1 >this is a header</h1>
-            </template>
-            <div testWrapper >
-                
+        <!-- <local-dom mobile="{{mobile}}" tablet="{{tablet}}" desktop="{{desktop}}"> -->
+            <div wrapper tab-index="0"> 
+                <template is="dom-if" if="[[withHeader]]">
+                    <h1 >this is a header</h1>
+                </template>
+                <div testWrapper >
+                    
+                </div>
+                <br ></br>
+                <br ></br>
+                <test-element class$='{{_computeOpacity(opaque)}}' first-msg = 'hello leco'>
+                    Cargando ...
+                </test-element>
+                <div menu>
+                    <drop-menu list-items='["first" ,"second","third","you get it"]'></drop-menu>
+                </div>
+                <br ></br>
+                <template is="dom-repeat" items="[[arr]]" as ='item'>
+                <li>{{item.name}}
+                </template>
+                <button on-click='_attachElement'> attach test-element</button>
+                <button on-click='_removeElement'> remove test-element</button>
             </div>
-            <br ></br>
-            <br ></br>
-            <test-element class$='{{_computeOpacity(opaque)}}' first-msg = 'hello leco'>
-                Cargando ...
-            </test-element>
-            <br ></br>
-            <template is="dom-repeat" items="[[arr]]" as ='item'>
-              <li>{{item.name}}
-            </template>
-            <button on-click='_attachElement'> attach test-element</button>
-            <button on-click='_removeElement'> remove test-element</button>
-        </div>
+        <!-- </local-dom> -->
     </template>
     <script>
-        class NewElement extends LastMixin(Polymer.mixinBehaviors([MyBehavior], OtherMixin(TestMixin(ParentElement))))  {
+        class NewElement extends Polymer.mixinBehaviors([Polymer.IronA11yKeysBehavior], OtherMixin(TestMixin(ParentElement)) )  {
             static get is() { return 'new-element'; }
+            get keyBindings(){
+              return {
+                'shift+s': '_updatePressed'
+              };
+            }
             static get properties() {return {
                 msg:{type:String,value:'hello cole'},
                 arr:{type:Array,value:[
@@ -64,6 +96,9 @@
             constructor() {
                 super();
                 this.loadedTestElement = new Promise(resolve => this.loadedTestElementR = resolve);
+            }
+            _updatePressed() {
+                console.log('pressed enter');
             }
             _computeOpacity(opaque) {
                 if (opaque) 
@@ -97,9 +132,13 @@
                 console.log('child button click');
                 this.msg = 'otra vaina'
             }
+            _handleMenuAction(e) {
+                console.log('selected',e.detail.id);
+            }
             ready() {
                 super.ready() ;
                 this.addEventListener('button-click', e => this._handleClick(e));   
+                this.addEventListener('menu-action', e => this._handleMenuAction(e));
             }
         }
         customElements.define('new-element', NewElement);
